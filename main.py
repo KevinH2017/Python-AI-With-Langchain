@@ -21,15 +21,28 @@ todoist = TodoistAPI(todoist_api_key)
 @tool
 def add_task(task:str, desc:str=None):
     '''
-    Adds a task to the todo list
+    Adds a task to the todo list.
     Args:
-        task (str): The task to add to the todo list
-        desc (str): Description of the task
+        task (str): The task to add to the todo list.
+        desc (str): Description of the task.
     '''
     todoist.add_task(content=task, description=desc)
 
-# Functions to be used in llm
-tools = [add_task]
+@tool
+def show_tasks():
+    '''
+    Shows all tasks from todo list.
+    Use this tool when the user wants to see their tasks.
+    '''
+    results_paginator = todoist.get_tasks()
+    tasks = list()
+    for task_list in results_paginator:
+        for task in task_list:
+            tasks.append(task)
+    return tasks
+
+# Tool functions to be used in llm
+tools = [add_task, show_tasks]
 
 # Configures Google LLM Gemini for use
 llm = ChatGoogleGenerativeAI(
@@ -38,11 +51,12 @@ llm = ChatGoogleGenerativeAI(
     temperature=0.3
 )
 
-# Default prompt for how the LLM will answer
-system_prompt = "You are a helpful assistant."
-# system_prompt = "You are a helpful assistant. You will help the user add tasks."
+# Prompt for how the LLM will answer
+system_prompt = """You are a helpful assistant. 
+You will help the user add tasks.
+You will help the user show existing tasks."""
 
-# {input} dynamically saves space for input to come later in the code
+# {input} dynamically saves space for input to be set later in the code
 # Prepares chat prompt
 prompt = ChatPromptTemplate([
     ("system", system_prompt), 
@@ -56,7 +70,7 @@ agent = create_openai_tools_agent(llm, tools, prompt)
 agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=False)
 
 # List of history of user and system messages
-history = []
+history = list()
 
 # Continously runs
 while True:
@@ -70,4 +84,3 @@ while True:
     print(response['output'])
     history.append(HumanMessage(content=user_input))
     history.append(AIMessage(content=response['output']))
-
