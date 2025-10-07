@@ -54,7 +54,9 @@ llm = ChatGoogleGenerativeAI(
 # Prompt for how the LLM will answer
 system_prompt = """You are a helpful assistant. 
 You will help the user add tasks.
-You will help the user show existing tasks."""
+You will help the user show existing tasks.
+If the user asks to show the tasks: for example, 'show me the tasks'
+print out the tasks to the user. Print them in a bullet list format."""
 
 # {input} dynamically saves space for input to be set later in the code
 # Prepares chat prompt
