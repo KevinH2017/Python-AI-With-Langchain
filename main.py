@@ -72,7 +72,7 @@ agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=False)
 # List of history of user and system messages
 history = list()
 
-# Continously runs
+# Continuously runs
 while True:
     user_input = input("Enter a task: ")
 
