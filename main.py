@@ -4,9 +4,7 @@ import os
 from dotenv import load_dotenv
 from langchain_core.messages import HumanMessage, AIMessage
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_core.output_parsers import StrOutputParser
 from langchain_google_genai import ChatGoogleGenerativeAI
-from pydantic_core.core_schema import model_field
 from langchain.tools import tool
 from langchain.agents import create_openai_tools_agent, AgentExecutor
 from todoist_api_python.api import TodoistAPI
