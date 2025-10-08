@@ -69,7 +69,7 @@ prompt = ChatPromptTemplate([
 agent = create_openai_tools_agent(llm, tools, prompt)
 agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=False)
 
-# List of history of user and system messages
+# List of history of user and AI messages
 history = list()
 
 # Continuously runs
